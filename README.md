@@ -7,6 +7,7 @@ A cinematic movie and TV discovery frontend built for the McCrack ecosystem.
 - Trending, popular movies, popular TV, search, title details, and local watchlist
 - TMDB catalog integration configured in Settings
 - Media Provider Manager for APIs you own or are authorized to use
+- Stremio add-on protocol connector: validates HTTPS manifests, requests compatible movie/series streams, and merges supported direct HTTP(S) MP4/HLS sources into the player
 - Multi-source selection with automatic fallback after a playback error, HLS/MP4 playback, optional WebVTT subtitles, and local playback progress
 - TV provider requests include season and episode numbers
 
@@ -58,6 +59,17 @@ The endpoint must allow browser CORS requests from your site and return JSON in 
 ```
 
 Only HTTPS source and subtitle URLs are accepted. HLS playback uses native browser support where available and loads hls.js from jsDelivr otherwise. Browser playback still depends on the provider's CORS headers, codec support, and the stream being valid. The frontend cannot bypass DRM, authentication restrictions, or provider access controls.
+
+## Connect a Stremio-compatible add-on
+
+1. Open **Settings → Stremio add-on connections**.
+2. Paste the HTTPS URL ending in `/manifest.json` for an add-on you operate or are authorized to use.
+3. McCrackFlix validates the manifest and stores the connection in this browser.
+4. Open a movie or series and press **Play**. McCrackFlix uses the TMDB external-ID endpoint to obtain the IMDb ID, then requests the matching Stremio stream resource. For series, it sends the selected season and episode in the Stremio video ID.
+
+The add-on must advertise the `stream` resource and the relevant `movie` or `series` type, and its host must allow browser CORS requests from your McCrackFlix origin. This is a client-side protocol adapter; it does not include a bundled add-on directory or guarantee that any third-party add-on is available.
+
+Only direct HTTPS media URLs ending in or identifying HLS (`.m3u8`) or MP4 (`.mp4`) are passed to the player. Torrent/info-hash entries, external-app links, DRM-protected streams, and formats that browsers cannot play are skipped. Add-ons may return other formats; those require a compatible player or a server-side integration. Subtitles from the Stremio subtitles resource are not currently fetched by this connector.
 
 ## Playback status
 This is a frontend provider adapter, not a hosted media backend. It does not scrape streaming directories or automatically discover third-party streams. Configure only sources you own or are authorized to distribute. For private production credentials, implement a server-side proxy with authentication and access controls.
