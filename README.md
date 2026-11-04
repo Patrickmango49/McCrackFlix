@@ -6,8 +6,9 @@ A cinematic movie and TV discovery frontend built for the McCrack ecosystem.
 - Responsive dark UI with cyan accents
 - Trending, popular movies, popular TV, search, title details, and local watchlist
 - TMDB catalog integration configured in Settings
-- Optional direct HTTPS media URL for a stream you are authorized to use
-- Single-file static frontend suitable for GitHub Pages
+- Media Provider Manager for APIs you own or are authorized to use
+- Multi-source selection, HLS/MP4 playback, optional WebVTT subtitles, and local playback progress
+- TV provider requests include season and episode numbers
 
 ## Run it
 Open `index.html` locally or enable GitHub Pages for this repository (Settings → Pages → Deploy from a branch → `main` → `/ (root)`).
@@ -19,8 +20,47 @@ Open `index.html` locally or enable GitHub Pages for this repository (Settings �
 
 The token is stored in this browser's localStorage. For a public production deployment, consider proxying API requests through a backend so you can manage rate limits and avoid exposing credentials. Follow TMDB's current API terms and attribution requirements.
 
+## Connect a media provider
+1. Open **Settings → Add provider**.
+2. Enter a provider name and an HTTPS API endpoint that you control or are authorized to call.
+3. Optionally enter a bearer token. Provider tokens are stored in localStorage and are visible to anyone using the browser; do not put private production secrets in a public frontend.
+4. Open a movie or TV title and choose **Play**. For TV, set the season and episode, then choose **Find episode sources**.
+
+McCrackFlix sends a GET request to the endpoint with these query parameters:
+- `type`: `movie` or `tv`
+- `id`: TMDB title ID
+- `season` and `episode`: included for TV titles
+
+The endpoint must allow browser CORS requests from your site and return JSON in this shape:
+
+```json
+{
+  "sources": [
+    {
+      "label": "Main",
+      "url": "https://media.example.com/title/stream.m3u8",
+      "type": "hls",
+      "subtitles": [
+        {
+          "label": "English",
+          "lang": "en",
+          "url": "https://media.example.com/subtitles/en.vtt"
+        }
+      ]
+    },
+    {
+      "label": "MP4 backup",
+      "url": "https://media.example.com/title/video.mp4",
+      "type": "mp4"
+    }
+  ]
+}
+```
+
+Only HTTPS source and subtitle URLs are accepted. HLS playback uses native browser support where available and loads hls.js from jsDelivr otherwise. Browser playback still depends on the provider's CORS headers, codec support, and the stream being valid. The frontend cannot bypass DRM, authentication restrictions, or provider access controls.
+
 ## Playback status
-This repository currently provides catalog discovery and a basic optional direct-stream URL connection. It does not automatically discover movie streams or include a media hosting backend. Configure only streams you own or are authorized to distribute. For a full personal media library, connect a separately hosted media server with proper authentication.
+This is a frontend provider adapter, not a hosted media backend. It does not scrape streaming directories or automatically discover third-party streams. Configure only sources you own or are authorized to distribute. For private production credentials, implement a server-side proxy with authentication and access controls.
 
 ## License and attribution
 Review the terms of each catalog, artwork, and media provider before deploying publicly. TMDB attribution and branding requirements apply when using its API.
