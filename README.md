@@ -7,7 +7,7 @@ A cinematic movie and TV discovery frontend built for the McCrack ecosystem.
 - Trending, popular movies, popular TV, search, title details, and local watchlist
 - TMDB catalog integration configured in Settings
 - Media Provider Manager for APIs you own or are authorized to use
-- Multi-source selection, HLS/MP4 playback, optional WebVTT subtitles, and local playback progress
+- Multi-source selection with automatic fallback after a playback error, HLS/MP4 playback, optional WebVTT subtitles, and local playback progress
 - TV provider requests include season and episode numbers
 
 ## Run it
