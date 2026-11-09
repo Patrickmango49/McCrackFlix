@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="theme-color" content="#080a0d" />
+<meta name="theme-color" content="#070b10" />
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Patrickmango49/McCrack/main/assets/icons/favicon.png" />
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Patrickmango49/McCrack/main/assets/icons/favicon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>McCrackFlix — Movies and TV Discovery</title>
 <meta name="description" content="McCrackFlix is your movie and TV discovery hub. Browse films and series and build your personal watchlist." />
@@ -15,6 +17,7 @@
 <meta property="og:url" content="https://patrickmango49.github.io/McCrackFlix/" />
 <meta name="twitter:card" content="summary_large_image" />
 <style>
+
   :root{ --bg:#141414; --bg2:#0b0b0b; --red:#42e8f5; --red2:#1495a3; --txt:#f5f5f5; --mut:#b3b3b3; --card:#1c1c1c; --radius:6px; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; background:var(--bg); color:var(--txt); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
@@ -132,6 +135,88 @@
   .player.loading .spinner2{ display:block; }
 
   @media(max-width:640px){ header{ padding:12px 14px; gap:12px; } .row h2,.rail,.grid{ padding-left:14px; padding-right:14px; } .hero{ padding:0 14px 30px; min-height:52vh; } .hero h1{ font-size:30px; } .btn{ padding:10px 18px; font-size:14px; } .search{ flex-basis:120px; } }
+
+  /* McCrack ecosystem visual refresh */
+  :root{
+    color-scheme:dark;
+    --bg:#070b10;--bg2:#0a1017;--red:#00d5ff;--red2:#078ca8;
+    --txt:#f4f8fb;--mut:#9ba9b5;--card:rgba(16,25,34,.78);
+    --radius:18px;--glass:rgba(13,22,31,.66);--glass-line:rgba(255,255,255,.11);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  html,body{background:radial-gradient(ellipse at 50% -18%,rgba(0,213,255,.14),transparent 42%),linear-gradient(180deg,#090e14,#06090d 72%);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+  body{min-height:100%;background-attachment:fixed}
+  ::selection{background:rgba(0,213,255,.28);color:#fff}
+  *{scrollbar-color:rgba(0,213,255,.34) transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(135,165,184,.24);border:2px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(0,213,255,.55);background-clip:padding-box}
+  #boot{background:radial-gradient(ellipse at 50% 45%,rgba(0,213,255,.13),transparent 42%),#060a0f;backdrop-filter:blur(24px);transition:opacity .75s var(--ease),filter .75s var(--ease)}
+  #boot .glyph{width:116px;height:116px;animation:mcfxpop 1.15s var(--ease) .12s both}
+  #boot .glyph img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 0 30px rgba(0,213,255,.38))}
+  #boot .word{letter-spacing:.12em;text-shadow:0 0 24px rgba(0,213,255,.22)}
+  header{position:sticky;top:10px;margin:10px 16px 0;padding:12px 18px;border:1px solid var(--glass-line);border-radius:20px;background:rgba(8,14,20,.66);backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(26px) saturate(155%);box-shadow:0 14px 42px rgba(0,0,0,.24);transition:background .35s var(--ease),border-color .35s var(--ease),box-shadow .35s var(--ease),transform .35s var(--ease)}
+  header.solid{background:rgba(8,14,20,.86);border-color:rgba(0,213,255,.19);box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.035)}
+  .brand{color:#eafaff;gap:10px;font-size:20px;letter-spacing:-.035em}
+  .brand img{width:34px;height:34px;display:block;object-fit:contain;filter:drop-shadow(0 0 12px rgba(0,213,255,.28))}
+  .tabs{gap:7px}
+  .tab{padding:9px 13px;border-radius:12px;color:#b8c5ce;opacity:1;transition:color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease)}
+  .tab:hover{background:rgba(255,255,255,.065);color:#fff;transform:translateY(-1px)}
+  .tab.on{color:#fff;background:rgba(0,213,255,.13);box-shadow:inset 0 0 0 1px rgba(0,213,255,.18)}
+  .search{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:10px 13px;transition:border-color .25s,background .25s,box-shadow .25s}
+  .search:focus-within{background:rgba(255,255,255,.085);border-color:rgba(0,213,255,.5);box-shadow:0 0 0 4px rgba(0,213,255,.08)}
+  .search input{color:#fff}
+  main{padding-bottom:90px}
+  .row{margin-bottom:38px}
+  .row h2{font-size:18px;letter-spacing:-.025em;padding:0 30px;color:#edf6fb}
+  .rail{grid-auto-columns:178px;gap:13px;padding:8px 30px 18px}
+  .grid{gap:18px;padding:10px 30px}
+  .card{border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 24px rgba(0,0,0,.16);transition:transform .42s var(--ease),border-color .35s var(--ease),box-shadow .42s var(--ease)}
+  .card:hover{transform:translateY(-5px) scale(1.025);border-color:rgba(0,213,255,.32);box-shadow:0 20px 48px rgba(0,0,0,.42),0 0 0 1px rgba(0,213,255,.06);z-index:3}
+  .card .p{background:#101a22}
+  .card .meta{padding:34px 11px 12px;background:linear-gradient(180deg,transparent,rgba(3,8,13,.94))}
+  .card .nm{font-size:13px;letter-spacing:-.01em}
+  .card .rate,.card .type{border-radius:9px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14)}
+  .card .type{background:rgba(0,170,205,.82);color:#00151b}
+  .card .bm{background:rgba(5,12,18,.7);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(16px);opacity:1}
+  .card .bm.on{background:rgba(0,180,215,.9);border-color:rgba(0,213,255,.65);color:#001217}
+  .hero{min-height:66vh;padding:0 30px 54px;background-position:center 24%;border-radius:0 0 28px 28px;overflow:hidden}
+  .hero::after{background:linear-gradient(90deg,rgba(5,10,15,.94) 0%,rgba(5,10,15,.55) 47%,rgba(5,10,15,.05) 82%),linear-gradient(0deg,#070b10 0%,rgba(7,11,16,.12) 60%)}
+  .hero .inner{max-width:610px;animation:heroEnter .85s var(--ease) both}
+  .hero h1{font-size:clamp(36px,5vw,58px);letter-spacing:-.055em}
+  .hero .desc{color:#d4e1e9;max-width:580px}
+  .chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:5px 11px;backdrop-filter:blur(12px)}
+  .btn{border-radius:13px;padding:12px 20px;transition:transform .25s var(--ease),background .25s,border-color .25s,box-shadow .25s;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.28)}
+  .btn:not(.ghost){background:linear-gradient(135deg,#baf7ff,#00c9ee);color:#04151b}
+  .btn.ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(16px)}
+  .toast{background:rgba(8,25,33,.88);color:#e9fbff;border:1px solid rgba(0,213,255,.24);border-radius:14px;backdrop-filter:blur(22px);box-shadow:0 18px 50px rgba(0,0,0,.38)}
+  .overlay{background:rgba(1,5,9,.72);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}
+  .detail{background:rgba(12,19,27,.91);border:1px solid rgba(255,255,255,.12);border-radius:24px;box-shadow:0 32px 100px rgba(0,0,0,.58);backdrop-filter:blur(28px) saturate(145%);overflow:hidden}
+  .detail .x,.overlay .close{background:rgba(8,16,23,.72)!important;border:1px solid rgba(255,255,255,.16)!important;backdrop-filter:blur(16px);transition:transform .25s var(--ease),background .25s}
+  .detail .x:hover,.overlay .close:hover{transform:rotate(90deg) scale(1.05);background:rgba(0,213,255,.2)!important}
+  .sect{padding:26px 32px 42px}
+  .ep{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:14px;transition:transform .3s var(--ease),border-color .3s,background .3s}
+  .ep:hover{transform:translateY(-2px);border-color:rgba(0,213,255,.35);background:rgba(0,213,255,.07)}
+  .player{background:#03070b}
+  .player .bar{background:rgba(8,15,22,.9);border-bottom:1px solid rgba(255,255,255,.1);backdrop-filter:blur(24px)}
+  .player select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:11px}
+  @keyframes heroEnter{from{opacity:0;transform:translateY(18px) scale(.99);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+  @media(max-width:760px){
+    header{top:6px;margin:6px 8px 0;padding:10px 12px;gap:8px;flex-wrap:wrap}
+    .brand{font-size:17px}.brand img{width:29px;height:29px}
+    .tabs{order:3;width:100%;overflow-x:auto;gap:4px}
+    .tab{white-space:nowrap;padding:8px 11px;font-size:12px}
+    .search{flex:1 1 120px;min-width:0}
+    .hero{min-height:56vh;padding:0 18px 34px}
+    .row h2{padding:0 18px}.rail{padding-left:18px;padding-right:18px;grid-auto-columns:150px;gap:10px}
+    .grid{padding-left:18px;padding-right:18px;gap:12px;grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}
+    .detail{margin:16px 10px 30px;border-radius:19px}
+    .sect{padding:20px 18px 30px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+
 </style>
 </head>
 <body>
@@ -140,7 +225,7 @@
   <div class="tf">
     <div class="bars"><i></i><i></i><i></i></div>
     <div class="glyph">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13 96V24h20l27 36 27-36h20v72H87V55L60 89 33 55v41z" fill="#42e8f5"/></svg>
+      <img src="https://raw.githubusercontent.com/Patrickmango49/McCrack/main/assets/icons/favicon.png" alt="McCrack logo" />
     </div>
     <div class="word">McCrackFlix</div>
   </div>
