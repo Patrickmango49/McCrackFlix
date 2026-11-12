@@ -242,6 +242,13 @@
   .drive-player iframe{flex:1;width:100%;min-height:0;border:0;background:#000}
   @media(max-width:760px){.drive-library-head{padding:20px 18px 8px}.drive-grid{padding:12px 18px 24px;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:11px}.drive-library-count{margin-left:18px}.drive-tab{gap:4px}.drive-tab small{font-size:8px;padding:2px 5px}.drive-player-bar{gap:8px;padding:9px}.drive-player-title{font-size:12px}}
   @media(hover:none){.drive-card .drive-play-mark{opacity:1;transform:none}}
+
+  .alpha-section{margin:0 0 24px}
+  .alpha-heading{display:flex;align-items:center;gap:12px;margin:18px 30px 4px;color:#dff9ff;font-size:15px;font-weight:850;letter-spacing:.08em}
+  .alpha-heading:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,rgba(0,213,255,.3),transparent)}
+  .alpha-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:8px 30px}
+  @media(max-width:760px){.alpha-heading{margin-left:18px;margin-right:18px}.alpha-grid{padding:8px 18px;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:11px}}
+
 </style>
 </head>
 <body>
@@ -264,7 +271,6 @@
   <nav class="tabs">
     <button class="tab on" data-tab="home">Home</button>
     <button class="tab" data-tab="movie">Movies</button>
-    <button class="tab drive-tab" data-tab="drive">Google Drive Hosted Movies <small>(More Reliable)</small></button>
     <button class="tab drive-tab" data-tab="drive">Google Drive Hosted Movies <small>(More Reliable)</small></button>
     <button class="tab" data-tab="series">TV Shows</button>
     <button class="tab" data-tab="mylist">My List</button>
@@ -568,7 +574,7 @@
   var drivePlayerTitle = document.getElementById("drivePlayerTitle");
 
 
-  function isPlaceholderTitle(name){ return /^movie\\s*\\d+\\s*$/i.test(String(name||"").trim()); }
+  function isPlaceholderTitle(name){ return /^movie\s*\d+\s*$/i.test(String(name||"").trim()); }
   function sortAndCleanMetas(items){
     return (items||[]).filter(function(m){return m && m.imdb_id && !isPlaceholderTitle(m.name);})
       .slice().sort(function(a,b){return String(a.name||"").localeCompare(String(b.name||""),undefined,{numeric:true,sensitivity:"base"});});
