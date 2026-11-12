@@ -265,6 +265,7 @@
     <button class="tab on" data-tab="home">Home</button>
     <button class="tab" data-tab="movie">Movies</button>
     <button class="tab drive-tab" data-tab="drive">Google Drive Hosted Movies <small>(More Reliable)</small></button>
+    <button class="tab drive-tab" data-tab="drive">Google Drive Hosted Movies <small>(More Reliable)</small></button>
     <button class="tab" data-tab="series">TV Shows</button>
     <button class="tab" data-tab="mylist">My List</button>
   </nav>
@@ -390,7 +391,7 @@
     view.appendChild(sec);
     var rail = sec.querySelector(".rail");
     get(url).then(function(j){
-      var metas = (j.metas||[]).filter(function(m){return m.imdb_id;});
+      var metas = sortAndCleanMetas(j.metas||[]);
       rail.innerHTML = metas.map(card).join("");
     }).catch(function(){ sec.style.display="none"; });
   }
@@ -422,7 +423,7 @@
   function renderHome(){
     view.innerHTML = "";
     get("/catalog/movie/top.json").then(function(j){
-      var m = (j.metas||[]).filter(function(x){return x.imdb_id;})[0];
+      var m = sortAndCleanMetas(j.metas||[])[0];
       if(m) renderHero(m);
     }).catch(function(){});
     renderLocalRail("Continue Watching", storeArr(KEY_RECENT));
@@ -433,17 +434,16 @@
   function renderList(kind){
     view.innerHTML = '<div class="grid" style="padding-top:14px"></div>';
     get("/catalog/"+kind+"/top.json").then(function(j){
-      var metas = (j.metas||[]).filter(function(m){return m.imdb_id;});
-      view.querySelector(".grid").innerHTML = metas.map(card).join("");
+      var metas = sortAndCleanMetas(j.metas||[]);
+      view.innerHTML = kind==="movie" ? alphaSections(metas,card,"alpha-grid") : '<div class="grid" style="padding-top:14px">'+metas.map(card).join("")+'</div>';
     }).catch(function(){ view.innerHTML = '<div class="grid"></div>'; });
   }
 
   function renderMylist(){
-    var items = storeArr(KEY_LIST);
+    var items = storeArr(KEY_LIST).filter(function(m){return !isPlaceholderTitle(m.name);}).sort(function(a,b){return String(a.name||"").localeCompare(String(b.name||""),undefined,{numeric:true,sensitivity:"base"});});
     view.innerHTML = '<h2 style="padding:16px 26px 4px;font-size:26px;font-weight:900">My List</h2>';
     if(!items.length){ view.innerHTML += '<div class="status">Nothing here yet. Open a title and tap &ldquo;+ My List&#8221;.</div>'; return; }
-    var grid = document.createElement("div"); grid.className = "grid"; grid.innerHTML = items.map(card).join("");
-    view.appendChild(grid);
+    view.innerHTML += alphaSections(items,card,"alpha-grid");
   }
 
   function doSearch(term){
@@ -454,9 +454,9 @@
       get("/catalog/movie/top/search="+q+".json").catch(function(){return {metas:[]};}),
       get("/catalog/series/top/search="+q+".json").catch(function(){return {metas:[]};})
     ]).then(function(res){
-      var all = res[0].metas.concat(res[1].metas).filter(function(m){return m.imdb_id;});
+      var all = sortAndCleanMetas(res[0].metas.concat(res[1].metas));
       if(!all.length){ sr.innerHTML = '<div class="sub" style="grid-column:1/-1;color:var(--mut)">No results.</div>'; return; }
-      sr.innerHTML = all.map(card).join("");
+      sr.innerHTML = alphaSections(all,card,"alpha-grid");
     });
   }
 
@@ -567,6 +567,24 @@
   var drivePlayer = document.getElementById("drivePlayer");
   var drivePlayerTitle = document.getElementById("drivePlayerTitle");
 
+
+  function isPlaceholderTitle(name){ return /^movie\\s*\\d+\\s*$/i.test(String(name||"").trim()); }
+  function sortAndCleanMetas(items){
+    return (items||[]).filter(function(m){return m && m.imdb_id && !isPlaceholderTitle(m.name);})
+      .slice().sort(function(a,b){return String(a.name||"").localeCompare(String(b.name||""),undefined,{numeric:true,sensitivity:"base"});});
+  }
+  function alphaSections(items, cardFn, gridClass){
+    var groups={};
+    (items||[]).forEach(function(item){
+      var letter=(String(item.name||item.title||"").trim().charAt(0)||"#").toUpperCase();
+      if(!/[A-Z]/.test(letter)) letter="#";
+      (groups[letter]||(groups[letter]=[])).push(item);
+    });
+    return Object.keys(groups).sort(function(a,b){return a.localeCompare(b);}).map(function(letter){
+      return '<section class="alpha-section"><h2 class="alpha-heading">'+esc(letter)+'</h2><div class="'+(gridClass||"alpha-grid")+'">'+groups[letter].map(cardFn).join("")+'</div></section>';
+    }).join("");
+  }
+
   function loadDriveMovies(){
     if(driveMovies) return Promise.resolve(driveMovies);
     if(driveMoviesLoading) return driveMoviesLoading;
@@ -583,7 +601,7 @@
           if(u.hostname !== "drive.google.com" || !u.pathname.includes("/file/d/")) return null;
         } catch(e){ return null; }
         return title ? {title:title,link:link,poster:poster} : null;
-      }).filter(Boolean);
+      }).filter(function(movie){return movie && !isPlaceholderTitle(movie.title);}).sort(function(a,b){return a.title.localeCompare(b.title,undefined,{numeric:true,sensitivity:"base"});});
       return driveMovies;
     }).catch(function(err){
       driveMoviesLoading = null;
@@ -619,10 +637,10 @@
         view.innerHTML = header+'<div class="status">No movies match that search.</div>';
         return;
       }
-      var cards = filtered.map(function(movie){
+      var cards = alphaSections(filtered,function(movie){
         return '<button class="drive-card" type="button" data-drive-index="'+items.indexOf(movie)+'" aria-label="Play '+esc(movie.title)+'"><img loading="lazy" src="'+esc(movie.poster)+'" alt="" onerror="this.style.opacity=.18"><span class="drive-play-mark" aria-hidden="true">&#9654;</span><span class="drive-card-meta"><strong>'+esc(movie.title)+'</strong><small>Google Drive · Play movie</small></span></button>';
-      }).join("");
-      view.innerHTML = header+'<div class="drive-grid">'+cards+'</div>';
+      },"drive-grid");
+      view.innerHTML = header+cards;
     }).catch(function(err){
       if(!document.querySelector('.tab.on[data-tab="drive"]')) return;
       view.innerHTML = '<section class="drive-library-head"><h1>Google Drive Hosted Movies</h1><p><span>(More Reliable)</span> · Movies hosted in your Google Drive library</p></section><div class="status">Could not load movies.txt. Make sure the file is published in the McCrackFlix repository root.<br><small>'+esc(err.message)+'</small></div>';
